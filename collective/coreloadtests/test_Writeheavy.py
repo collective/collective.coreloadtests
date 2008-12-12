@@ -7,6 +7,8 @@ import unittest
 from funkload.FunkLoadTestCase import FunkLoadTestCase
 from webunit.utility import Upload
 from funkload.utils import Data
+from funkload.Lipsum import Lipsum, V_ASCII, CHARS, SEP
+
 #from funkload.utils import xmlrpc_get_credential
 
 class Writeheavy(FunkLoadTestCase):
@@ -19,6 +21,7 @@ class Writeheavy(FunkLoadTestCase):
         """Setting up test."""
         self.logd("setUp")
         self.server_url = self.conf_get('main', 'url')
+        self.lipsum = Lipsum(vocab=V_ASCII, chars=CHARS, sep=SEP)
         # XXX here you can setup the credential access like this
         # credential_host = self.conf_get('credential', 'host')
         # credential_port = self.conf_getInt('credential', 'port')
@@ -29,24 +32,28 @@ class Writeheavy(FunkLoadTestCase):
 
     def test_WriteHeavy(self):
         # The description should be set in the configuration file
+        
         server_url = self.server_url
         # begin of test ---------------------------------------------
-
 
         self.get(server_url + "/plone",
             description="Get /plone")
 
-        result = self.get(server_url + "/plone/join_form",
+        join_form = self.get(server_url + "/plone/join_form",
                           description="Get /plone/join_form")
 
-        _authenticator = result.extractForm([('form',1)]).get('_authenticator')
+        _authenticator = join_form.extractForm([('form',1)]).get('_authenticator')
 
+
+        user_id = self.lipsum.getWord()
+        user_fullname = self.lipsum.getSubject(length=2, prefix=None, uniq=True)
+        
         self.post(server_url + "/plone/join_form", params=[
             ['last_visit:date', '2008/12/12 14:53:21.283 GMT'],
             ['prev_visit:date', '2008/12/12 14:53:21.283 GMT'],
             ['came_from_prefs', ''],
-            ['fullname', 'John Smith'],
-            ['username', 'user'],
+            ['fullname', user_fullname],
+            ['username', user_id],
             ['email', 'user@foobar.com'],
             ['password', '12345'],
             ['password_confirm', '12345'],
@@ -62,23 +69,26 @@ class Writeheavy(FunkLoadTestCase):
             ['login_name', ''],
             ['pwd_empty', '0'],
             ['came_from', 'login_success'],
-            ['__ac_name', 'user'],
+            ['__ac_name', user_id],
             ['__ac_password', '12345']],
             description="Post /plone/login_form")
 
         self.get(server_url + "/plone/dashboard",
             description="Get /plone/dashboard")
 
-        self.get(server_url + "/plone/Members/user/view",
+        self.get(server_url + "/plone/Members/" + user_id +"/view",
             description="Get /plone/Members/user/view")
 
-        self.get(server_url + "/plone/Members/user/createObject?type_name=Folder",
-            description="Get /plone/Members/user/createObject")
+        folder_portal_factory = self._browse(server_url + "/plone/Members/" + user_id +"/createObject?type_name=Folder",
+                                             method='get', 
+                                             follow_redirect=False,
+                                             description = 'Get folder portal factory')
 
-
-
-        self.post(server_url + "/plone/Members/user/portal_factory/Folder/folder.2008-12-12.6280843853/atct_edit", params=[
-            ['id', 'folder.2008-12-12.6280843853'],
+        folder_edit_url = folder_portal_factory.headers.get('Location')        
+        folder_id = folder_edit_url.split('/')[-2]
+ 
+        folder_created = self.post(server_url + "/plone/Members/" + user_id +"/portal_factory/Folder/" + folder_id +"/atct_edit", params=[
+            ['id', folder_id],
             ['title', 'folder'],
             ['description', ''],
             ['description_text_format', 'text/plain'],
@@ -115,27 +125,28 @@ class Writeheavy(FunkLoadTestCase):
             ['add_reference.field:record', ''],
             ['add_reference.type:record', ''],
             ['add_reference.destination:record', ''],
-            ['last_referer', 'http://localhost:8080/plone/Members/user/view'],
+            ['last_referer', 'http://localhost:8080/plone/Members/' + user_id + '/view'],
             ['form_submit', 'Save']],
             description="Post /plone/Members/user...280843853/atct_edit")
 
-        self.get(server_url + "/plone/Members/user/portal_factory/Folder/folder.2008-12-12.6280843853//@@plone_lock_operations/safe_unlock",
-            description="Get /plone/Members/user...rations/safe_unlock")
+        new_folder_id = folder_created.url.split('/')[-2]
 
-        self.get(server_url + "/plone/Members/user/folder/createObject?type_name=Document",
-            description="Get /plone/Members/user/folder/createObject")
+        document_portal_factory = self._browse(server_url + "/plone/Members/" + user_id +"/" + new_folder_id + "/createObject?type_name=Document",
+                                             method='get', 
+                                             follow_redirect=False,
+                                             description = 'Get document portal factory')
 
-        self.get(server_url + "/plone/Members/user/folder/portal_factory/emptypage",
-            description="Get /plone/Members/user...l_factory/emptypage")
-
-        self.post(server_url + "/plone/Members/user/folder/portal_factory/Document/document.2008-12-12.6511052309/atct_edit", params=[
-            ['id', 'document.2008-12-12.6511052309'],
-            ['title', 'Lorem ipsum'],
-            ['description', 'Lorem Ipsum'],
+        document_edit_url = document_portal_factory.headers.get('Location')        
+        document_id = document_edit_url.split('/')[-2]
+        
+        self.post(server_url + "/plone/Members/" + user_id +"/" + new_folder_id + "/portal_factory/Document/" + document_id + "/atct_edit", params=[
+            ['id', document_id],
+            ['title', self.lipsum.getSubject(length=5, prefix=None, uniq=False,length_min=None, length_max=None)],
+            ['description', self.lipsum.getMessage(length=10)],
             ['description_text_format', 'text/plain'],
             ['text_text_format', 'text/html'],
             ['text_text_format:default', 'text/html'],
-            ['text', '\r\n<p>Lorem Ipsum</p>\r\n'],
+            ['text', self.lipsum.getMessage(length=30)],
             ['text_file', Upload("")],
             ['subject_existing_keywords:default:list', ''],
             ['relatedItems:default:list', ''],
@@ -173,12 +184,9 @@ class Writeheavy(FunkLoadTestCase):
             ['add_reference.field:record', ''],
             ['add_reference.type:record', ''],
             ['add_reference.destination:record', ''],
-            ['last_referer', 'http://localhost:8080/plone/Members/user/folder/'],
+            ['last_referer', 'http://localhost:8080/plone/Members/' + user_id +'/' + new_folder_id + '/'],
             ['form_submit', 'Save']],
             description="Post /plone/Members/user...511052309/atct_edit")
-
-        self.get(server_url + "/plone/Members/user/folder/portal_factory/Document/document.2008-12-12.6511052309/@@plone_lock_operations/safe_unlock",
-            description="Get /plone/Members/user...rations/safe_unlock")
 
         self.get(server_url + "/plone/logout",
             description="Get /plone/logout")
@@ -188,8 +196,6 @@ class Writeheavy(FunkLoadTestCase):
     def tearDown(self):
         """Setting up test."""
         self.logd("tearDown.\n")
-
-
 
 if __name__ in ('main', '__main__'):
     unittest.main()
