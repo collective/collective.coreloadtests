@@ -52,7 +52,7 @@ class Contentcreation(FunkLoadTestCase):
         folder_edit_url = folder_portal_factory.headers.get('Location')        
         folder_id = folder_edit_url.split('/')[-2]
  
-        folder_created = self.post(server_url + "/plone/Members/" + self.user_id +"/portal_factory/Folder/" + folder_id +"/atct_edit", params=[
+        folder_created = self.post(folder_edit_url, params=[
             ['id', folder_id],
             ['title', 'folder'],
             ['description', ''],
@@ -104,7 +104,7 @@ class Contentcreation(FunkLoadTestCase):
         document_edit_url = document_portal_factory.headers.get('Location')        
         document_id = document_edit_url.split('/')[-2]
         
-        self.post(server_url + "/plone/Members/" + self.user_id +"/" + new_folder_id + "/portal_factory/Document/" + document_id + "/atct_edit", params=[
+        self.post(document_edit_url, params=[                                                                                                                                                         
             ['id', document_id],
             ['title', self.lipsum.getSubject(length=5, prefix=None, uniq=False,length_min=None, length_max=None)],
             ['description', self.lipsum.getMessage(length=10)],
