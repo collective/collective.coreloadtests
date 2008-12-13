@@ -3,7 +3,10 @@ from plone.app.controlpanel.security import ISecuritySchema
 def configureSecurity(context):
     """
     Setup portal security for heavy write test scenario
-    """    
+    """
+    if not context.readDataFile('configure_security.txt'):
+        return
+    
     portal = context.getSite()
     security = ISecuritySchema(portal)
     

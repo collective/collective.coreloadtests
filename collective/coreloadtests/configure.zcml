@@ -13,5 +13,14 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
   />
 
+
+  <genericsetup:registerProfile
+        name="contentcreation"
+        title="collective.coreloadtests contentcreation"
+        directory="profiles/contentcreation"
+        description="Extension profile for collective.coreloadtests contentcreation."
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+  />
   
 </configure>
