@@ -54,7 +54,11 @@ class Readonly(FunkLoadTestCase):
         """Setting up test."""
         self.logd("tearDown.\n")
 
+def test_suite():
+    return unittest.makeSuite(Readonly)
 
+additional_tests = test_suite
 
-if __name__ in ('main', '__main__'):
-    unittest.main()
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')
+    
