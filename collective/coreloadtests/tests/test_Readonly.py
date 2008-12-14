@@ -4,12 +4,10 @@
 $Id: $
 """
 import unittest
-from funkload.FunkLoadTestCase import FunkLoadTestCase
-from webunit.utility import Upload
-from funkload.utils import Data
-#from funkload.utils import xmlrpc_get_credential
 
-class Readonly(FunkLoadTestCase):
+from collective.funkload import testcase
+
+class Readonly(testcase.FLTestCase):
     """Read only load test scenario
 
     This test use a configuration file Readonly.conf.
