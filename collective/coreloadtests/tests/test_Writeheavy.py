@@ -4,14 +4,14 @@
 $Id: $
 """
 import unittest
-from funkload.FunkLoadTestCase import FunkLoadTestCase
-from webunit.utility import Upload
-from funkload.utils import Data
-from funkload.Lipsum import Lipsum, V_ASCII, CHARS, SEP
 
+from webunit.utility import Upload
+from funkload.Lipsum import Lipsum, V_ASCII, CHARS, SEP
 #from funkload.utils import xmlrpc_get_credential
 
-class Writeheavy(FunkLoadTestCase):
+from collective.funkload import testcase
+
+class Writeheavy(testcase.FLTestCase):
     """Heavy write load test scenario
 
     This test use a configuration file Writeheavy.conf.
@@ -197,5 +197,11 @@ class Writeheavy(FunkLoadTestCase):
         """Setting up test."""
         self.logd("tearDown.\n")
 
-if __name__ in ('main', '__main__'):
-    unittest.main()
+def test_suite():
+    return unittest.makeSuite(Writeheavy)
+
+additional_tests = test_suite
+
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')
+
