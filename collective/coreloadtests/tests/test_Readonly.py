@@ -33,8 +33,8 @@ class Readonly(testcase.FLTestCase):
         self.get(server_url + "/plone",
             description="Get /plone")
 
-        self.get(server_url + "/plone/@@overview-controlpanel",
-            description="Get /plone/@@overview-controlpanel")
+        self.get(server_url + "/plone/news",
+            description="Get /plone/news")
 
         self.get(server_url + "/plone/contact-info",
             description="Get /plone/contact-info")
