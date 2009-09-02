@@ -33,7 +33,7 @@ class Contentcreation(testcase.FLTestCase):
         server_url = self.server_url
         # begin of test ---------------------------------------------
         
-        self.post(server_url + "/plone/login_form", params=[
+        self.post(server_url + "/coreloadtests/login_form", params=[
             ['form.submitted', '1'],
             ['js_enabled', '0'],
             ['cookies_enabled', '0'],
@@ -42,9 +42,9 @@ class Contentcreation(testcase.FLTestCase):
             ['came_from', 'login_success'],
             ['__ac_name', self.user_id],
             ['__ac_password', 'testpw']],
-            description="Post /plone/login_form")        
+            description="Post /coreloadtests/login_form")        
         
-        folder_portal_factory = self._browse(server_url + "/plone/Members/" + self.user_id +"/createObject?type_name=Folder",
+        folder_portal_factory = self._browse(server_url + "/coreloadtests/Members/" + self.user_id +"/createObject?type_name=Folder",
                                              method='get', 
                                              follow_redirect=False,
                                              description = 'Get folder portal factory')
@@ -90,13 +90,13 @@ class Contentcreation(testcase.FLTestCase):
             ['add_reference.field:record', ''],
             ['add_reference.type:record', ''],
             ['add_reference.destination:record', ''],
-            ['last_referer', 'http://localhost:8080/plone/Members/' + self.user_id + '/view'],
+            ['last_referer', 'http://localhost:8080/coreloadtests/Members/' + self.user_id + '/view'],
             ['form_submit', 'Save']],
-            description="Post /plone/Members/user...280843853/atct_edit")
+            description="Post /coreloadtests/Members/user...280843853/atct_edit")
 
         new_folder_id = folder_created.url.split('/')[-2]
 
-        document_portal_factory = self._browse(server_url + "/plone/Members/" + self.user_id +"/" + new_folder_id + "/createObject?type_name=Document",
+        document_portal_factory = self._browse(server_url + "/coreloadtests/Members/" + self.user_id +"/" + new_folder_id + "/createObject?type_name=Document",
                                              method='get', 
                                              follow_redirect=False,
                                              description = 'Get document portal factory')
@@ -149,12 +149,12 @@ class Contentcreation(testcase.FLTestCase):
             ['add_reference.field:record', ''],
             ['add_reference.type:record', ''],
             ['add_reference.destination:record', ''],
-            ['last_referer', 'http://localhost:8080/plone/Members/' + self.user_id +'/' + new_folder_id + '/'],
+            ['last_referer', 'http://localhost:8080/coreloadtests/Members/' + self.user_id +'/' + new_folder_id + '/'],
             ['form_submit', 'Save']],
-            description="Post /plone/Members/user...511052309/atct_edit")
+            description="Post /coreloadtests/Members/user...511052309/atct_edit")
 
-        self.get(server_url + "/plone/logout",
-            description="Get /plone/logout")
+        self.get(server_url + "/coreloadtests/logout",
+            description="Get /coreloadtests/logout")
 
         # end of test -----------------------------------------------
 

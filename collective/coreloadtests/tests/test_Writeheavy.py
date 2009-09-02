@@ -36,11 +36,11 @@ class Writeheavy(testcase.FLTestCase):
         server_url = self.server_url
         # begin of test ---------------------------------------------
 
-        self.get(server_url + "/plone",
-            description="Get /plone")
+        self.get(server_url + "/coreloadtests",
+            description="Get /coreloadtests")
 
-        join_form = self.get(server_url + "/plone/join_form",
-                          description="Get /plone/join_form")
+        join_form = self.get(server_url + "/coreloadtests/join_form",
+                          description="Get /coreloadtests/join_form")
 
         _authenticator = join_form.extractForm([('form',1)]).get('_authenticator')
 
@@ -48,7 +48,7 @@ class Writeheavy(testcase.FLTestCase):
         user_id = self.lipsum.getWord()
         user_fullname = self.lipsum.getSubject(length=2, prefix=None, uniq=True)
         
-        self.post(server_url + "/plone/join_form", params=[
+        self.post(server_url + "/coreloadtests/join_form", params=[
             ['last_visit:date', '2008/12/12 14:53:21.283 GMT'],
             ['prev_visit:date', '2008/12/12 14:53:21.283 GMT'],
             ['came_from_prefs', ''],
@@ -60,9 +60,9 @@ class Writeheavy(testcase.FLTestCase):
             ['form.button.Register', 'Register'],
             ['form.submitted', '1'],
             ['_authenticator', _authenticator]],
-            description="Post /plone/join_form")
+            description="Post /coreloadtests/join_form")
 
-        self.post(server_url + "/plone/login_form", params=[
+        self.post(server_url + "/coreloadtests/login_form", params=[
             ['form.submitted', '1'],
             ['js_enabled', '0'],
             ['cookies_enabled', '0'],
@@ -71,15 +71,15 @@ class Writeheavy(testcase.FLTestCase):
             ['came_from', 'login_success'],
             ['__ac_name', user_id],
             ['__ac_password', '12345']],
-            description="Post /plone/login_form")
+            description="Post /coreloadtests/login_form")
 
-        self.get(server_url + "/plone/dashboard",
-            description="Get /plone/dashboard")
+        self.get(server_url + "/coreloadtests/dashboard",
+            description="Get /coreloadtests/dashboard")
 
-        self.get(server_url + "/plone/Members/" + user_id +"/view",
-            description="Get /plone/Members/user/view")
+        self.get(server_url + "/coreloadtests/Members/" + user_id +"/view",
+            description="Get /coreloadtests/Members/user/view")
 
-        folder_portal_factory = self._browse(server_url + "/plone/Members/" + user_id +"/createObject?type_name=Folder",
+        folder_portal_factory = self._browse(server_url + "/coreloadtests/Members/" + user_id +"/createObject?type_name=Folder",
                                              method='get', 
                                              follow_redirect=False,
                                              description = 'Get folder portal factory')
@@ -125,13 +125,13 @@ class Writeheavy(testcase.FLTestCase):
             ['add_reference.field:record', ''],
             ['add_reference.type:record', ''],
             ['add_reference.destination:record', ''],
-            ['last_referer', 'http://localhost:8080/plone/Members/' + user_id + '/view'],
+            ['last_referer', 'http://localhost:8080/coreloadtests/Members/' + user_id + '/view'],
             ['form_submit', 'Save']],
-            description="Post /plone/Members/user...280843853/atct_edit")
+            description="Post /coreloadtests/Members/user...280843853/atct_edit")
 
         new_folder_id = folder_created.url.split('/')[-2]
 
-        document_portal_factory = self._browse(server_url + "/plone/Members/" + user_id +"/" + new_folder_id + "/createObject?type_name=Document",
+        document_portal_factory = self._browse(server_url + "/coreloadtests/Members/" + user_id +"/" + new_folder_id + "/createObject?type_name=Document",
                                              method='get', 
                                              follow_redirect=False,
                                              description = 'Get document portal factory')
@@ -184,12 +184,12 @@ class Writeheavy(testcase.FLTestCase):
             ['add_reference.field:record', ''],
             ['add_reference.type:record', ''],
             ['add_reference.destination:record', ''],
-            ['last_referer', 'http://localhost:8080/plone/Members/' + user_id +'/' + new_folder_id + '/'],
+            ['last_referer', 'http://localhost:8080/coreloadtests/Members/' + user_id +'/' + new_folder_id + '/'],
             ['form_submit', 'Save']],
-            description="Post /plone/Members/user...511052309/atct_edit")
+            description="Post /coreloadtests/Members/user...511052309/atct_edit")
 
-        self.get(server_url + "/plone/logout",
-            description="Get /plone/logout")
+        self.get(server_url + "/coreloadtests/logout",
+            description="Get /coreloadtests/logout")
 
         # end of test -----------------------------------------------
 

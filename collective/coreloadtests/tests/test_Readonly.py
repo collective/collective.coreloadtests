@@ -30,20 +30,20 @@ class Readonly(testcase.FLTestCase):
         server_url = self.server_url
         # begin of test ---------------------------------------------
 
-        self.get(server_url + "/plone",
-            description="Get /plone")
+        self.get(server_url + "/coreloadtests",
+            description="Get /coreloadtests")
 
-        self.get(server_url + "/plone/news",
-            description="Get /plone/news")
+        self.get(server_url + "/coreloadtests/news",
+            description="Get /coreloadtests/news")
 
-        self.get(server_url + "/plone/contact-info",
-            description="Get /plone/contact-info")
+        self.get(server_url + "/coreloadtests/contact-info",
+            description="Get /coreloadtests/contact-info")
 
-        self.get(server_url + "/plone/folder_listing",
-            description="Get plone/folder_listing")
+        self.get(server_url + "/coreloadtests/folder_listing",
+            description="Get coreloadtests/folder_listing")
 
-        self.get(server_url + "/plone/sitemap",
-            description="Get plone/sitemap")
+        self.get(server_url + "/coreloadtests/sitemap",
+            description="Get coreloadtests/sitemap")
 
 
         # end of test -----------------------------------------------
