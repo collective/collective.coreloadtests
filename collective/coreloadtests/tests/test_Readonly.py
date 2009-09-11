@@ -45,6 +45,8 @@ class Readonly(testcase.FLTestCase):
         self.get(server_url + "/coreloadtests/sitemap",
             description="Get coreloadtests/sitemap")
 
+        self.get(server_url + "/coreloadtests/search?Type=Page",
+            description="Get /coreloadtests/search?Type=Page")
 
         # end of test -----------------------------------------------
 
