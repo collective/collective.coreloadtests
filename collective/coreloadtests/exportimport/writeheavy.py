@@ -18,3 +18,5 @@ def configureSecurity(context):
     
     #set member area creation flag
     security.set_enable_user_folders(True)
+
+    security.allow_anon_views_about = True
