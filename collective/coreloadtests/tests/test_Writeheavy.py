@@ -10,12 +10,12 @@ from webunit.utility import Upload
 from funkload.Lipsum import Lipsum, V_ASCII, CHARS, SEP
 #from funkload.utils import xmlrpc_get_credential
 
-from collective.funkload import testcase
+from funkload import FunkLoadTestCase
 
 
 AUTHENTICATOR_RE = re.compile(r'<input type="hidden" name="_authenticator" value="([\w\d]+)"/>')
 
-class Writeheavy(testcase.FLTestCase):
+class Writeheavy(FunkLoadTestCase.FunkLoadTestCase):
     """Heavy write load test scenario
 
     This test use a configuration file Writeheavy.conf.

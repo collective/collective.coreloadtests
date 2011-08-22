@@ -5,9 +5,10 @@ $Id: $
 """
 import unittest
 
-from collective.funkload import testcase
+from funkload import FunkLoadTestCase
 
-class Readonly(testcase.FLTestCase):
+
+class Readonly(FunkLoadTestCase.FunkLoadTestCase):
     """Read only load test scenario
 
     This test use a configuration file Readonly.conf.

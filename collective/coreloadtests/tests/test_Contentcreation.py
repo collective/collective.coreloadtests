@@ -9,11 +9,11 @@ from webunit.utility import Upload
 from funkload.Lipsum import Lipsum, V_ASCII, CHARS, SEP
 #from funkload.utils import xmlrpc_get_credential
 
-from collective.funkload import testcase
+from funkload import FunkLoadTestCase
 
 import collective.coreloadtests
 
-class Contentcreation(testcase.FLTestCase):
+class Contentcreation(FunkLoadTestCase.FunkLoadTestCase):
     """Content creation load test scenario
 
     This test use a configuration file Contentcreation.conf.
