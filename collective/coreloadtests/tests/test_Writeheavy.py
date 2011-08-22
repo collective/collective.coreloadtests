@@ -3,6 +3,7 @@
 
 $Id: $
 """
+import re
 import unittest
 
 from webunit.utility import Upload
@@ -10,6 +11,9 @@ from funkload.Lipsum import Lipsum, V_ASCII, CHARS, SEP
 #from funkload.utils import xmlrpc_get_credential
 
 from collective.funkload import testcase
+
+
+AUTHENTICATOR_RE = re.compile(r'<input type="hidden" name="_authenticator" value="([\w\d]+)"/>')
 
 class Writeheavy(testcase.FLTestCase):
     """Heavy write load test scenario
@@ -39,28 +43,23 @@ class Writeheavy(testcase.FLTestCase):
         self.get(server_url + "/coreloadtests",
             description="Get /coreloadtests")
 
-        join_form = self.get(server_url + "/coreloadtests/join_form",
-                          description="Get /coreloadtests/join_form")
+        join_form = self.get(server_url + "/coreloadtests/register",
+                          description="Get /coreloadtests/register")
 
-        _authenticator = join_form.extractForm([('form',1)]).get('_authenticator')
-
+        _authenticator = AUTHENTICATOR_RE.search(join_form.body).group(1)
 
         user_id = self.lipsum.getWord()
         user_fullname = self.lipsum.getSubject(length=2, prefix=None, uniq=True)
         
-        self.post(server_url + "/coreloadtests/join_form", params=[
-            ['last_visit:date', '2008/12/12 14:53:21.283 GMT'],
-            ['prev_visit:date', '2008/12/12 14:53:21.283 GMT'],
-            ['came_from_prefs', ''],
-            ['fullname', user_fullname],
-            ['username', user_id],
-            ['email', 'user@foobar.com'],
-            ['password', '12345'],
-            ['password_confirm', '12345'],
-            ['form.button.Register', 'Register'],
-            ['form.submitted', '1'],
+        self.post(server_url + "/coreloadtests/register", params=[
+            ['form.fullname', user_fullname],
+            ['form.username', user_id],
+            ['form.email', 'user@foobar.com'],
+            ['form.password', '12345'],
+            ['form.password_ctl', '12345'],
+            ['form.actions.register', 'Register'],
             ['_authenticator', _authenticator]],
-            description="Post /coreloadtests/join_form")
+            description="Post /coreloadtests/register")
 
         self.post(server_url + "/coreloadtests/login_form", params=[
             ['form.submitted', '1'],
