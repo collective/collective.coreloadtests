@@ -3,6 +3,7 @@
 
 $Id: $
 """
+import os
 import unittest
 import random
 from webunit.utility import Upload
@@ -11,7 +12,6 @@ from funkload.Lipsum import Lipsum, V_ASCII, CHARS, SEP
 
 from funkload import FunkLoadTestCase
 
-import collective.coreloadtests
 
 class Contentcreation(FunkLoadTestCase.FunkLoadTestCase):
     """Content creation load test scenario
@@ -23,7 +23,7 @@ class Contentcreation(FunkLoadTestCase.FunkLoadTestCase):
         """Setting up test."""
         self.logd("setUp")
         self.server_url = self.conf_get('main', 'url')
-        self.users_list = open(collective.coreloadtests.__path__[0] + '/profiles/contentcreation/users_list.txt', 'r').readlines()
+        self.users_list = open(os.path.dirname(os.path.dirname(__file__)) + '/profiles/contentcreation/users_list.txt', 'r').readlines()
         self.user_id = random.choice(self.users_list).strip()         
         self.lipsum = Lipsum(vocab=V_ASCII, chars=CHARS, sep=SEP)
 
