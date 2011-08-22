@@ -34,8 +34,8 @@ class Readonly(FunkLoadTestCase.FunkLoadTestCase):
         self.get(server_url + "/coreloadtests",
             description="Get /coreloadtests")
 
-        self.get(server_url + "/coreloadtests/news",
-            description="Get /coreloadtests/news")
+        self.get(server_url + "/coreloadtests/Members",
+            description="Get /coreloadtests/Members")
 
         self.get(server_url + "/coreloadtests/contact-info",
             description="Get /coreloadtests/contact-info")
