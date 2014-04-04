@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.2 - Unreleased
+----------------
+
+* Moved to github
+
+* added some simple instructions in README
+
 0.1 - Unreleased
 ----------------
 
