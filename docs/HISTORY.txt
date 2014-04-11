@@ -4,7 +4,7 @@ Changelog
 0.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Make README look nice on pypi
 
 
 0.2 (2014-04-04)
